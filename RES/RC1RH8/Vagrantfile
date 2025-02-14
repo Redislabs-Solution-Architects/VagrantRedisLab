@@ -10,6 +10,7 @@ redis_cluster_password="redis"
 
 # Update
 network_type="public_network"
+#network_type="private_network"
 
 ram_size=6144
 cpu_count=4

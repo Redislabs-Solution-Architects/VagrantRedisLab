@@ -1,3 +1,5 @@
+# See RC1RH8/Vagrantfile for details.
+
 #provision_type="local"
 provision_type="full"
 SHARED_mount_point="/vagrant"
@@ -7,6 +9,7 @@ redis_cluster_admin="redis@redis.com"
 redis_cluster_password="redis"
 
 network_type="public_network"
+#network_type="private_network"
 
 ram_size=6144
 cpu_count=4
@@ -50,30 +53,6 @@ Vagrant.configure("2") do |config|
       server.vm.provision "redis-create-cluster", type: "shell", run: "never", path: "../COMMON/REDIS_create_cluster.sh"
       server.vm.provision "redis-uninstall-bins", type: "shell", run: "never", path: "../COMMON/REDIS_uninstall_bins.sh"
       server.vm.provision "yum-packages", type: "shell", run: "never", path: "../COMMON/setup_yum.sh"
-    end
-  end
-end
-
-
-Vagrant.configure("2") do |config|
-  NODES.each do |node|
-    config.vm.define node[:hostname] do |server|
-      server.vm.hostname = node[:hostname]
-      server.vm.provider :virtualbox do |vb|
-        vb.name    = node[:hostname]
-        vb.memory = ram_size
-        vb.cpus = cpu_count
-      end
-      server.vm.box = "generic/centos8s"
-      server.vm.hostname = node[:hostname]
-      server.vm.network network_type, ip: node[:ip]
-      server.vm.synced_folder "../../SHARED", SHARED_mount_point
-      server.vm.provision "init", type: "shell", path: "../COMMON/setup_nodes.sh", args: nameserver
-      server.vm.provision "redis-env-vars", type: "shell", path: "../../SHARED/SCRIPTS/REDIS_provision_prep.sh", args: [redis_cluster_fqdn, redis_cluster_admin, redis_cluster_password, first_node_ip]
-      server.vm.provision "redis-bins", type: "shell", run: "never", path: "../../SHARED/SCRIPTS/REDIS_install_bins.sh"
-      server.vm.provision "redis-cluster", type: "shell", run: "never", path: "../../SHARED/SCRIPTS/REDIS_create_cluster.sh", args: [first_node_ip, redis_cluster_fqdn, redis_cluster_admin, redis_cluster_password, node[:ip]]
-      server.vm.provision "remove_redis", type: "shell", run: "never", path: "../../SHARED/SCRIPTS/REDIS_uninstall_bins.sh"
-      server.vm.provision "setup_yum", type: "shell", run: "never", path: "../COMMON/setup_yum.sh"
     end
   end
 end
