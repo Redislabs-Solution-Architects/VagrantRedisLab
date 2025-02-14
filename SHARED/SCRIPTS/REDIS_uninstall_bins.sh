@@ -1,3 +1,5 @@
+echo "Executing $0"
+sleep 2
 test -f /root/rl_uninstall.sh_running && echo 'The test -f /root/rl_uninstall.sh_running is positive. Exit.'
 test -f /root/rl_uninstall.sh_running && exit 0
 test -f /root/RES_install.sh_running && echo 'The test -f /root/RES_install.sh_running is positive. Exit.'

@@ -1,0 +1,42 @@
+SHARED_mount_point="/vagrant"
+network_type="public_network"
+k8Token='k1813e.5044869ec5bc2393'
+nameserver='192.168.69.2'
+podNETWORKcidr='10.69.0.0/16'
+metalLB_IPRange='192.168.69.189-192.168.69.189'
+
+ram_size=8192
+cpu_count=8
+
+hostname_prefix='k8-180-'
+controlPLANE_IP='192.168.69.180'
+controlPLANE_PORT='6443'
+NODES = [
+    { :hostname => hostname_prefix+"cp", :ip => controlPLANE_IP },
+    { :hostname => hostname_prefix+"w1", :ip => "192.168.69.181" },
+    { :hostname => hostname_prefix+"w2", :ip => "192.168.69.182" },
+    { :hostname => hostname_prefix+"w3", :ip => "192.168.69.183" },
+]
+
+Vagrant.configure("2") do |config|
+  NODES.each do |node|
+    config.vm.define node[:hostname] do |server|
+      server.vm.hostname = node[:hostname]
+      server.vm.provider :virtualbox do |vb|
+        vb.name    = node[:hostname]
+        vb.memory = ram_size
+        vb.cpus = cpu_count
+      end
+      server.vm.box = "generic/centos8s"
+      #server.vm.box_version = "4.3.12"
+      server.vm.hostname = node[:hostname]
+      server.vm.network network_type, ip: node[:ip]
+      server.vm.synced_folder "../../SHARED", SHARED_mount_point
+      if node[:hostname] == hostname_prefix+"cp"
+        server.vm.provision "shell", path: "../COMMON/setup_cp.sh", args: [node[:ip], k8Token, nameserver, podNETWORKcidr, metalLB_IPRange, controlPLANE_PORT]
+      else
+        server.vm.provision "shell", path: "../COMMON/setup_w.sh", args: [node[:ip], k8Token, nameserver, controlPLANE_IP+':'+controlPLANE_PORT]
+      end
+    end
+  end
+end
