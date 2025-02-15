@@ -1,0 +1,1 @@
+wget https://s3.amazonaws.com/redis-enterprise-software-downloads/7.8.4/redislabs-7.8.4-66-rhel8-x86_64.tar

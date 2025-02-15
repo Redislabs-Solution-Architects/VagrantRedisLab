@@ -7,8 +7,11 @@ REDIS_SHARED_mount_point=$3
 REDIS_self_hostname=$1
 VAGRANT_SHARED_mount_point=$2
 
+echo "./\$(hostname -s).sh" > ${VAGRANT_SHARED_mount_point}/_PROVISION/INIT_host.sh
+
 cat >${VAGRANT_SHARED_mount_point}/_PROVISION/${REDIS_self_hostname}.sh<<EOF
 #$(date)
+echo "Executing: \$0"
 ${REDIS_SHARED_mount_point}/SCRIPTS/REDIS_provision_prep.sh $REDIS_cluster_fqdn $REDIS_cluster_admin $REDIS_cluster_password $REDIS_first_node_ip
 rm -rf /root/_PROVISION
 mkdir -p /root/_PROVISION
