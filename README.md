@@ -1,16 +1,12 @@
 # VagrantRedisLab
 Vagrant-based Redis lab
 
-It is a work in progress yet. This automation is built around Vagrant and Virtualbox for home labs, but it will also be usable for Vagrant-less installations. You'll need Vagrant installed anyway (just 1G of your drive).
+It is a work in progress yet. This automation is built around Vagrant and Virtualbox for home labs, but it will also be usable for Vagrant-less installations. You'll need Vagrant installed (just 1G of your drive).
 
-<<<<<<< HEAD
 0. If installing to manually created hosts, make sure you have the following installed:
 ```
 yum install -y screen iproute-tc jq htop python3-policycoreutils policycoreutils-python-utils boost-program-options cyrus-sasl checkpolicy python3-audit cyrus-sasl-plain cyrus-sasl-md5 python3-setools python3-libsemanage
 ```
-
-=======
->>>>>>> 3d38ba57ca6e51a3759fda7032a1b4062309ee52
 1. Run INIT.sh to initiate the env.
 ```
 ./INIT.sh
@@ -19,7 +15,6 @@ yum install -y screen iproute-tc jq htop python3-policycoreutils policycoreutils
 ++ tee ./SHARED/_PROVISION/README.txt
 This is the temporary folder for all environment stuff. Do not modify anything here.
 ```
-<<<<<<< HEAD
 2. Download RES package: cd SHARED/PACKAGES/RES/ && ./wget.sh
 ```
 cd SHARED/PACKAGES/RES/ && ./wget.sh
@@ -60,7 +55,7 @@ Bringing machine 'rc2-rh8-node5' up with 'virtualbox' provider...
     rc2-rh8-node5:  . . Creating /root/redis-env-vars.sh
 ```
 
-5. If you'd run it with provision_type="local" option, then all files required for installation are precoocked and ready to be copied to host. Take a copy of SHARED folder content to every host you have or have it mounted over any available flavour utility to mount it to all hosts. E.g.
+5. If you run it with the provision_type="local" option, then all files required for installation are precooked and ready to be copied to the host. Take a copy of the SHARED folder content to every host you have or mount it over any available flavour utility to mount it to all hosts. E.g.
 ```
 [root@rc2-rh8-node1 vagrant]# pwd
 /vagrant
@@ -97,7 +92,7 @@ lrwxrwxrwx. 1 root root 38 Feb 14 23:33 REDIS_install_bins.sh -> /vagrant/SCRIPT
 lrwxrwxrwx. 1 root root 40 Feb 14 23:33 REDIS_uninstall_bins.sh -> /vagrant/SCRIPTS/REDIS_uninstall_bins.sh
 [root@rc2-rh8-node1 _PROVISION]#
 ```
-5.3 Install binaries and watch log file for installation process:
+5.3 Install binaries and watch the log file for the installation process:
 ```
 [root@rc2-rh8-node1 _PROVISION]# ./REDIS_install_bins.sh
 Executing ./REDIS_install_bins.sh
@@ -118,7 +113,7 @@ ALL TESTS PASSED.
 2025-02-14 23:38:09.578 [!] Installation complete.
 [root@rc2-rh8-node1 _PROVISION]#
 ```
-5.3 Start from the "first_node_ip" host and create Redis cluster first node:
+5.3 Start from the "first_node_ip" host and create the Redis cluster first node:
 ```
 [root@rc2-rh8-node1 _PROVISION]# ./REDIS_create_cluster.sh
 Executing ./REDIS_create_cluster.sh
@@ -131,9 +126,9 @@ ERROR: invalid token 'status'
 Creating a new cluster... ok
 [root@rc2-rh8-node1 _PROVISION]#
 ```
-5.4 Repeat the same steps on th rest of nodes.
+5.4 Repeat the same steps on the rest of the nodes.
 
-6. If you are using Vagrant and Virtualbox in your own LAB, then upon vagrant up completion you'll have your VMs up and running ready to deploy Redis cluster.
+6. If you are using Vagrant and Virtualbox in your own LAB, then upon completing vagrant up, you'll have your VMs up and running and ready to deploy a Redis cluster.
 
 6.1 It is already applied, but you can refresh your Redis env:
 ```
@@ -190,7 +185,7 @@ Executing ../COMMON/VAGRANT_provision_prep.sh
     rc2-rh8-node5: Joining cluster... ok
 /home/mobaxterm/Vagrant/RES/RC2RH8#
 ```
-6.4 Re-scratch the etire Redis cluster:
+6.4 Re-scratch the entire Redis cluster:
 ```
 /home/mobaxterm/Vagrant/RES/RC2RH8# ./redis-rescratch-bins+cluster.sh
 Executing ./redis-rescratch-bins+cluster.sh
@@ -211,6 +206,3 @@ Executing ../COMMON/VAGRANT_provision_prep.sh
     rc2-rh8-node5: Joining cluster... ok
 /home/mobaxterm/Vagrant/RES/RC2RH8#
 ```
-=======
-
->>>>>>> 3d38ba57ca6e51a3759fda7032a1b4062309ee52
