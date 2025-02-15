@@ -3,11 +3,14 @@ Vagrant-based Redis lab
 
 It is a work in progress yet. This automation is built around Vagrant and Virtualbox for home labs, but it will also be usable for Vagrant-less installations. You'll need Vagrant installed anyway (just 1G of your drive).
 
+<<<<<<< HEAD
 0. If installing to manually created hosts, make sure you have the following installed:
 ```
 yum install -y screen iproute-tc jq htop python3-policycoreutils policycoreutils-python-utils boost-program-options cyrus-sasl checkpolicy python3-audit cyrus-sasl-plain cyrus-sasl-md5 python3-setools python3-libsemanage
 ```
 
+=======
+>>>>>>> 3d38ba57ca6e51a3759fda7032a1b4062309ee52
 1. Run INIT.sh to initiate the env.
 ```
 ./INIT.sh
@@ -16,6 +19,7 @@ yum install -y screen iproute-tc jq htop python3-policycoreutils policycoreutils
 ++ tee ./SHARED/_PROVISION/README.txt
 This is the temporary folder for all environment stuff. Do not modify anything here.
 ```
+<<<<<<< HEAD
 2. Download RES package: cd SHARED/PACKAGES/RES/ && ./wget.sh
 ```
 cd SHARED/PACKAGES/RES/ && ./wget.sh
@@ -207,3 +211,6 @@ Executing ../COMMON/VAGRANT_provision_prep.sh
     rc2-rh8-node5: Joining cluster... ok
 /home/mobaxterm/Vagrant/RES/RC2RH8#
 ```
+=======
+
+>>>>>>> 3d38ba57ca6e51a3759fda7032a1b4062309ee52
