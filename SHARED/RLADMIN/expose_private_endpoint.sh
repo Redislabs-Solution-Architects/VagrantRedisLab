@@ -1,0 +1,2 @@
+register_dns_suffix
+ rladmin tune cluster expose_hostnames_for_all_suffixes enabled

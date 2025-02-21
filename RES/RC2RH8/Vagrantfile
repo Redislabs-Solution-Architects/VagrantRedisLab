@@ -1,41 +1,19 @@
-# See RC1RH8/Vagrantfile for details.
-
-#provision_type="local"
-provision_type="full"
-SHARED_mount_point="/vagrant"
-nameserver="192.168.69.2"
-redis_cluster_fqdn="rc2.example.com"
-redis_cluster_admin="redis@redis.com"
-redis_cluster_password="redis"
-
-network_type="public_network"
-#network_type="private_network"
-
-ram_size=6144
-cpu_count=4
-hostname_prefix="rc2-rh8-node"
-first_node_ip="192.168.69.201"
 NODES = [
-    { :hostname => hostname_prefix+"1", :ip => first_node_ip },
-    { :hostname => hostname_prefix+"2", :ip => "192.168.69.202" },
-    { :hostname => hostname_prefix+"3", :ip => "192.168.69.203" },
-    { :hostname => hostname_prefix+"4", :ip => "192.168.69.204" },
-    { :hostname => hostname_prefix+"5", :ip => "192.168.69.205" },
+{ :hostname => 'rc2-rh8-node1', :ip => '192.168.69.201' },
+{ :hostname => 'rc2-rh8-node2', :ip => '192.168.69.202' },
+{ :hostname => 'rc2-rh8-node3', :ip => '192.168.69.203' },
+{ :hostname => 'rc2-rh8-node4', :ip => '192.168.69.204' },
+{ :hostname => 'rc2-rh8-node5', :ip => '192.168.69.205' },
 ]
-
-setup_redis_env_vars=SHARED_mount_point+' '+redis_cluster_fqdn+' '+redis_cluster_admin+' '+redis_cluster_password+' '+first_node_ip
-
-NODES.each do |node|
-  system ('sh ../COMMON/VAGRANT_provision_prep.sh '+node[:hostname]+' ../../SHARED '+setup_redis_env_vars)
-end
-
-if provision_type == 'local'
-  puts 'Provision only local Vagrant files. Exit.'
-  abort
-end
-
+ENV_name="RC2RH8"
+SHARED_mount_point="/vagrant"
+redis_cluster_fqdn="rc2.example.com"
+network_type="public_network"
+ram_size="6144"
+cpu_count="4"
 Vagrant.configure("2") do |config|
   NODES.each do |node|
+    #system ('sh ./'+node[:hostname]+'.'+redis_cluster_fqdn+'.sh')
     config.vm.define node[:hostname] do |server|
       server.vm.hostname = node[:hostname]
       server.vm.provider :virtualbox do |vb|
@@ -47,12 +25,12 @@ Vagrant.configure("2") do |config|
       server.vm.hostname = node[:hostname]
       server.vm.network network_type, ip: node[:ip]
       server.vm.synced_folder "../../SHARED", SHARED_mount_point
-      server.vm.provision "redis-init", type: "shell", path: "../COMMON/setup_nodes.sh", args: nameserver
-      server.vm.provision "redis-provision-prep", type: "shell", path: "../COMMON/REDIS_provision_prep.sh", args: [SHARED_mount_point, node[:hostname]]
+      server.vm.provision "redis-provision-prep", type: "shell", run: "never", path: "../COMMON/REDIS_provision_prep.sh", args: [SHARED_mount_point, node[:hostname], ENV_name]
+      server.vm.provision "redis-init", type: "shell", run: "never", path: "../COMMON/REDIS_nodes_init.sh"
       server.vm.provision "redis-install-bins", type: "shell", run: "never", path: "../COMMON/REDIS_install_bins.sh"
       server.vm.provision "redis-create-cluster", type: "shell", run: "never", path: "../COMMON/REDIS_create_cluster.sh"
       server.vm.provision "redis-uninstall-bins", type: "shell", run: "never", path: "../COMMON/REDIS_uninstall_bins.sh"
-      server.vm.provision "yum-packages", type: "shell", run: "never", path: "../COMMON/setup_yum.sh"
+      server.vm.provision "redis-yum-packages", type: "shell", run: "never", path: "../COMMON/setup_yum.sh"
     end
   end
 end

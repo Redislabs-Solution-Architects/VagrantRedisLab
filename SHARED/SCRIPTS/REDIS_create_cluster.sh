@@ -1,10 +1,10 @@
-echo "Executing $0"
+echo "Executing $0 $@"
 sleep 2
 source /root/redis-env-vars.sh
 
 test -f /root/rl_uninstall.sh_running && echo 'The test -f /root/rl_uninstall.sh_running is positive. Exit.'
 test -f /root/rl_uninstall.sh_running && exit 0
-while test -f /root/RES_install.sh_running; do echo "$(date) - Exists /root/RES_install.sh_running. sleep 10."; echo; tail -1 /root/RES_install.sh_log; echo; sleep 10; done
+while test -f /root/RES_install.sh_running; do echo "$(date) - Exists /root/RES_install.sh_running. sleep 20."; echo; tail -1 /root/RES_install.sh_log; echo; sleep 20; done
 
 source /etc/opt/redislabs/redislabs_env_config.sh
 
