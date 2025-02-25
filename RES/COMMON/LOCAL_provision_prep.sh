@@ -21,8 +21,6 @@ echo "Executing: \$0 \$@"
 cd \$(dirname \$0) && \
 ./INIT_host.sh && \
 sleep 2 && \
-/root/SHARED/_PROVISION/RC1RH8/INIT_host.sh && \
-sleep 2 && \
 /root/_PROVISION/REDIS_nodes_init.sh && \
 sleep 2 && \
 /root/_PROVISION/REDIS_install_bins.sh&&ls -lrt && \

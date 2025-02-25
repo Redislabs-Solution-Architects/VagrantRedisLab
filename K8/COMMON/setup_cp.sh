@@ -80,7 +80,7 @@ EOF
 yum install -y kubelet kubeadm kubectl iproute-tc bash-completion screen
 kubeadm config images pull
 #systemctl start kubelet
-
+#############################################################################################################################################################
 # Set the --node-ip argument for kubelet
 touch /etc/sysconfig/kubelet
 echo "KUBELET_EXTRA_ARGS=--node-ip=$controlPLANE_IP" > /etc/sysconfig/kubelet

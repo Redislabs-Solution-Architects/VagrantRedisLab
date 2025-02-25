@@ -3,14 +3,8 @@ test "$1" = '' && exit 1;
 test "$2" = '' && echo "Execution is: ./_REC-install <NAMESPACE> <VERSION-BUNDLE-FOLDER>";
 test "$2" = '' && exit 1;
 
-#echo " . . . create ./REC-$1-delete.sh"
-#cat <<EOF | tee ./REC-$1-delete.sh
-#kubectl delete namespace $1 &&\
-#while [ \$(kubectl get namespaces|grep "^$1 *Terminating"|wc -l) -lt 1 ] ; do kubectl get namespaces; sleep 20; done
-#EOF
-
-echo " [+] create ./$1-REC.yaml"
-cat <<EOF | tee ./$1-REC.yaml
+echo " [+] Create ./$2/$1-REC.yaml"
+cat <<EOF | tee ./$2/$1-REC.yaml
 apiVersion: "app.redislabs.com/v1"
 kind: "RedisEnterpriseCluster"
 metadata:
@@ -45,8 +39,8 @@ kubectl apply -f ./$2/bundle.yaml && \
 echo " [+] Waiting for redis-enterprise-operator to get ready ..." && \
 while [ $(kubectl get deployment|grep "^redis-enterprise-operator *1/1 *1 *1"|wc -l) -lt 1 ] ; do kubectl get deployment; sleep 5; done; kubectl get deployment && \
 
-echo " [+] Running: kubectl apply -f ./$1-REC.yaml" && \
-kubectl apply -f ./$1-REC.yaml && \
+echo " [+] Running: kubectl apply -f ./$2/$1-REC.yaml" && \
+kubectl apply -f ./$2/$1-REC.yaml && \
 echo " [+] Waiting for a first REC pod to get ready ..." && \
 while [ $(kubectl get pods|grep "rec-0 *2/2 *Running"|wc -l) -lt 1 ] ; do kubectl get pods -o wide; sleep 20; done; kubectl get pods -o wide && \
 echo " [+] First pod $1-rec0 is ready. Switching to kubectl rollout status sts/$1-rec ..." && \
@@ -64,7 +58,8 @@ echo " [+] 10 seconds sleep for admission/webhook.yaml being ready..." && \
 sleep 10 && \
 
 # create patch file
-cat <<EOF | tee ./$1-REC-modified-webhook.yaml
+echo " [+] Create ./$2/$1-REC-modified-webhook.yaml"
+cat <<EOF | tee ./$2/$1-REC-modified-webhook.yaml
 webhooks:
 - name: redisenterprise.admission.redislabs
   clientConfig:
@@ -76,14 +71,16 @@ webhooks:
 EOF
 # patch webhook with caBundle
 echo " [+] Patch webhook with certificate $CERT and $1" && \
-kubectl patch ValidatingWebhookConfiguration redis-enterprise-admission --patch "$(cat $1-REC-modified-webhook.yaml)" && \
+kubectl patch ValidatingWebhookConfiguration redis-enterprise-admission --patch "$(cat ./$2/$1-REC-modified-webhook.yaml)" && \
 echo " [+] 30 seconds sleep for all configs being settled ..." && \
 sleep 30
 
+# Get modules version.
 ReJSON_version=$(kubectl describe rec -n $1 $1-rec|grep -A 2 ReJSON|tail -1|tr -d ' ')
 search_version=$(kubectl describe rec -n $1 $1-rec|grep -A 2 search|tail -1|tr -d ' ')
 
-cat <<EOF | tee ./$1-enterprise-database.yaml
+echo " [+] Create ./$2/$1-enterprise-database.yaml"
+cat <<EOF | tee ./$2/$1-enterprise-database.yaml
 apiVersion: app.redislabs.com/v1alpha1
 kind: RedisEnterpriseDatabase
 metadata:
@@ -104,10 +101,11 @@ spec:
       version: $ReJSON_version
 EOF
 
-echo " [+] Running: kubectl apply -f ./$1-enterprise-database.yaml" && \
-kubectl apply -f ./$1-enterprise-database.yaml
+echo " [+] Running: kubectl apply -f ./$2/$1-enterprise-database.yaml" && \
+kubectl apply -f ./$2/$1-enterprise-database.yaml
 
-cat <<EOF | tee ./$1-ingress-ui.yaml
+echo " [+] Create ./$2/$1-ingress-ui.yaml"
+cat <<EOF | tee ./$2/$1-ingress-ui.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -131,10 +129,11 @@ spec:
                   number: 8443
 EOF
 
-echo " [+] Running: kubectl apply -f ./$1-ingress-ui.yaml" && \
-kubectl apply -f ./$1-ingress-ui.yaml
+echo " [+] Running: kubectl apply -f ./$2/$1-ingress-ui.yaml" && \
+kubectl apply -f ./$2/$1-ingress-ui.yaml
 
-cat <<EOF | tee ./$1-ingress-rest.yaml
+echo " [+] Create ./$2/$1-ingress-rest.yaml"
+cat <<EOF | tee ./$2/$1-ingress-rest.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -158,10 +157,11 @@ spec:
                   number: 9443
 EOF
 
-echo " [+] Running: kubectl apply -f ./$1-ingress-rest.yaml" && \
-kubectl apply -f ./$1-ingress-rest.yaml
+echo " [+] Running: kubectl apply -f ./$2/$1-ingress-rest.yaml" && \
+kubectl apply -f ./$2/$1-ingress-rest.yaml
 
-cat <<EOF | tee ./$1-ingress_$1-enterprise-database.yaml
+echo " [+] Create ./$2/$1-ingress_$1-enterprise-database.yaml"
+cat <<EOF | tee ./$2/$1-ingress_$1-enterprise-database.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -185,7 +185,10 @@ spec:
                   number: 10001
 EOF
 
-echo " [+] Running: kubectl apply -f ./$1-ingress_$1-enterprise-database.yaml" && \
-kubectl apply -f ./$1-ingress_$1-enterprise-database.yaml
+echo " [+] Running: kubectl apply -f ./$2/$1-ingress_$1-enterprise-database.yaml" && \
+kubectl apply -f ./$2/$1-ingress_$1-enterprise-database.yaml
+sleep 5
 
+echo " [+] Adding ingress records to /etc/hosts file."
+OLDIFS=$IFS;IFS=$'\n';for h in $(kubectl get ingress -n $1|grep ^$1|awk '{print $4" "$3}'); do grep "$h" /etc/hosts || echo "$h" >> /etc/hosts; done; IFS=$OLDIFS;
 echo "Done"

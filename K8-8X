@@ -1,19 +1,21 @@
-ENV_name="RC1RH8"
+ENV_name="K8-8X"
 # Location on a Redis node where you'll put content of the SHARED folder.
-SHARED_mount_point="/root/SHARED"
+SHARED_mount_point="/root/SHRD"
 # Put IP of your DNS server here
 nameserver="192.168.69.2"
-# Update with desired redis cluster parameters.
-redis_cluster_fqdn="rc1.example.com"
-redis_cluster_admin="redis@redis.com"
-redis_cluster_password="redis"
+
+k8Token='k1813e.5044869ec5bc2393'
+podNETWORKcidr='10.69.0.0/16'
+metalLB_IPRange='192.168.69.89-192.168.69.89'
+controlPLANE_PORT='6443'
 
 # hostname prefix for your redis nodes
-hostname_prefix="rc1-rh8-node"
+hostname_prefix='k8-8X-n'
 # IP address prefix. If set to "192.168.69.10", nodes will be "192.168.69.101, 192.168.69.102, ..."
-ip_prefix="192.168.69.10"
-# desired node count in a cluster
-node_count=3
+ip_prefix="192.168.69.8"
+
+#node_count=4
+node_count=4
 
 for i in $(seq 1 $node_count); do
     node_names+=("${hostname_prefix}${i}")
@@ -21,14 +23,16 @@ for i in $(seq 1 $node_count); do
 done
 
 ## Override nodes definition:
-#node_ips=("192.168.69.101" "192.168.69.102" "192.168.69.103")
+#node_ips=("192.168.69.181" "192.168.69.182" "192.168.69.183" "192.168.69.184")
 #node_names=("rc1-rh8-node1" "rc1-rh8-node2" "rc1-rh8-node3")
+
+controlPLANE_IP=${node_ips[0]}
 
 # Vagrant section
 # Vagrant network type https://developer.hashicorp.com/vagrant/docs/networking
 network_type="public_network"
 #network_type="private_network"
 # VM RAm/CPU
-ram_size=6144
-cpu_count=4
+ram_size=8192
+cpu_count=8
 # vagrant section end.
