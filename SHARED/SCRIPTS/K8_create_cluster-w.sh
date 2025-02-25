@@ -19,7 +19,11 @@ echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 # Allow IP forwarding.
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
-#systemctl start kubelet
+until [ "$(curl -k https://$controlPLANE_IP:$controlPLANE_PORT/livez)" == "ok" ]; do echo "Waiting for Control Plane $controlPLANE_IP:$controlPLANE_PORT..."; curl -k https://192.168.69.81:6443/livez?verbose; sleep 10; done
+
+# Just to be on a safe side since it may fluctuate sometimes.
+sleep 5
+
 touch /etc/sysconfig/kubelet
 echo "KUBELET_EXTRA_ARGS=--node-ip=$K8_self_IP" > /etc/sysconfig/kubelet
 

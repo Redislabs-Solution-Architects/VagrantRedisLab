@@ -189,6 +189,8 @@ echo " [+] Running: kubectl apply -f ./$2/$1-ingress_$1-enterprise-database.yaml
 kubectl apply -f ./$2/$1-ingress_$1-enterprise-database.yaml
 sleep 5
 
+# Ingress to /etc/hosts. Lazy to figure out the JSON path, so... :)
+while [ "$(kubectl get ingress -n $1 -o json|grep ip|awk '{print $2}'|sed 's/\"//g'|tail -1)" == "" ]; do echo " [+] Waiting for ingress IP assigned...";sleep 5; kubectl get ingress -n $1; done
 echo " [+] Adding ingress records to /etc/hosts file."
 OLDIFS=$IFS;IFS=$'\n';for h in $(kubectl get ingress -n $1|grep ^$1|awk '{print $4" "$3}'); do grep "$h" /etc/hosts || echo "$h" >> /etc/hosts; done; IFS=$OLDIFS;
 echo "Done"

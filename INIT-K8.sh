@@ -66,6 +66,7 @@ Vagrant.configure("2") do |config|
       server.vm.hostname = node[:hostname]
       server.vm.network network_type, ip: node[:ip]
       server.vm.synced_folder "../../SHARED", SHARED_mount_point
+      server.vm.provision "shell", inline: "sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config;systemctl reload sshd"
       server.vm.provision "k8-provision-prep", type: "shell", run: "never", path: "../COMMON/K8_provision_prep.sh", args: [SHARED_mount_point, node[:hostname], ENV_name]
       server.vm.provision "k8-init", type: "shell", run: "never", path: "../COMMON/K8_nodes_init.sh"
       server.vm.provision "k8-install-bins", type: "shell", run: "never", path: "../COMMON/K8_install_bins.sh"

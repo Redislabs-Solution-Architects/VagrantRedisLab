@@ -20,6 +20,9 @@ systemctl start xrdp
 systemctl status xrdp
 yum install -y https://rpmfind.net/linux/remi/enterprise/8/modular/x86_64/redis-7.2.7-1.el8.remi.x86_64.rpm
 EOF_BKG
+
+kubeadm config images pull --kubernetes-version stable-1.29
+
 echo " [+] $(date) Evoking in background: screen -dm bash -c \"/root/setup_XFCE_bkg.sh > /root/setup_XFCE_bkg.log\" ... "
 chmod +x /root/setup_XFCE_bkg.sh
 screen -dm bash -c "/root/setup_XFCE_bkg.sh > /root/setup_XFCE_bkg.log"

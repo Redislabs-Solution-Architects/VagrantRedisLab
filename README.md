@@ -48,3 +48,38 @@ redislabs-7.8.4-66-rhel8-x86_64.tar     100%[===================================
 #
 ```
 3. Once done, read Docs/Vagrant-based-installation.md or Manual-installation.md for further steps.
+
+
+# VagrantRedisLab - K8
+
+1. Make a copy of either of K8* files and fill it. Run INIT-K8.sh to initiate the env.
+```
+# ./INIT-K8.sh K8-18X
+node_names:k8-18X-n1 k8-18X-n2 k8-18X-n3 k8-18X-n4
+node_ips: 192.168.69.181 192.168.69.182 192.168.69.183 192.168.69.184
+This is the temporary folder for all environment stuff. Do not modify anything here.
+Executing step: COMMON/LOCAL_provision_prep.sh
+ . Executing: ./K8/COMMON/LOCAL_provision_prep.sh k8-18X-n1 ./SHARED /vagrant 192.168.69.181 192.168.69.2 K8-18X 192.168.69.181 k1813e.5044869ec5bc2393 10.69.0.0/16 192.168.69.189-192.168.69.189 6443 3
+ . . Executing: mkdir -p ./SHARED/_PROVISION/K8-18X
+ . . Creating ./SHARED/_PROVISION/K8-18X/INIT_host.sh
+ . . Creating: ./SHARED/_PROVISION/K8-18X/k8-18X-n1.sh
+Executing step: COMMON/LOCAL_provision_prep.sh
+ . Executing: ./K8/COMMON/LOCAL_provision_prep.sh k8-18X-n2 ./SHARED /vagrant 192.168.69.181 192.168.69.2 K8-18X 192.168.69.181 k1813e.5044869ec5bc2393 10.69.0.0/16 192.168.69.189-192.168.69.189 6443 3
+ . . Executing: mkdir -p ./SHARED/_PROVISION/K8-18X
+ . . Creating ./SHARED/_PROVISION/K8-18X/INIT_host.sh
+ . . Creating: ./SHARED/_PROVISION/K8-18X/k8-18X-n2.sh
+Executing step: COMMON/LOCAL_provision_prep.sh
+ . Executing: ./K8/COMMON/LOCAL_provision_prep.sh k8-18X-n3 ./SHARED /vagrant 192.168.69.181 192.168.69.2 K8-18X 192.168.69.181 k1813e.5044869ec5bc2393 10.69.0.0/16 192.168.69.189-192.168.69.189 6443 3
+ . . Executing: mkdir -p ./SHARED/_PROVISION/K8-18X
+ . . Creating ./SHARED/_PROVISION/K8-18X/INIT_host.sh
+ . . Creating: ./SHARED/_PROVISION/K8-18X/k8-18X-n3.sh
+Executing step: COMMON/LOCAL_provision_prep.sh
+ . Executing: ./K8/COMMON/LOCAL_provision_prep.sh k8-18X-n4 ./SHARED /vagrant 192.168.69.181 192.168.69.2 K8-18X 192.168.69.181 k1813e.5044869ec5bc2393 10.69.0.0/16 192.168.69.189-192.168.69.189 6443 3
+ . . Executing: mkdir -p ./SHARED/_PROVISION/K8-18X
+ . . Creating ./SHARED/_PROVISION/K8-18X/INIT_host.sh
+ . . Creating: ./SHARED/_PROVISION/K8-18X/k8-18X-n4.sh
+#
+```
+2. Pack the entire content of SHARED folder and transfer to your four K8 hosts.
+
+3. Installation flow: https://drive.google.com/file/d/1rvyekyB69SPGcvs7DWuIhSuQf95R9G1q/view?usp=drive_link

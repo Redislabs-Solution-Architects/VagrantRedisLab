@@ -41,4 +41,4 @@ gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
 EOF
 # K8 requires iproute-tc
 yum install -y kubelet kubeadm kubectl iproute-tc bash-completion
-kubeadm config images pull --kubernetes-version stable-1.29
+# kubeadm config images pull --kubernetes-version stable-1.29
