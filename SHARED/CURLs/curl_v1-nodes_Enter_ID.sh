@@ -6,4 +6,8 @@ CURL="curl -o $0.json -s -k -u $REDIS_cluster_admin:$REDIS_cluster_password -X G
 
 echo " . . Executing: $CURL"
 bash -c "$CURL"
-cat $0.json | jq
+cat $0.json | jq '.[] | {node_uid: .uid}'
+
+read -p "Enter U_ID to display node: " U_ID
+
+./curl_v1-nodes_ID.sh $U_ID

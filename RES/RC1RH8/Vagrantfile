@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
       server.vm.hostname = node[:hostname]
       server.vm.network network_type, ip: node[:ip]
       server.vm.synced_folder "../../SHARED", SHARED_mount_point
+      server.vm.provision "shell", inline: "sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config;systemctl reload sshd"
       server.vm.provision "redis-provision-prep", type: "shell", run: "never", path: "../COMMON/REDIS_provision_prep.sh", args: [SHARED_mount_point, node[:hostname], ENV_name]
       server.vm.provision "redis-init", type: "shell", run: "never", path: "../COMMON/REDIS_nodes_init.sh"
       server.vm.provision "redis-install-bins", type: "shell", run: "never", path: "../COMMON/REDIS_install_bins.sh"
