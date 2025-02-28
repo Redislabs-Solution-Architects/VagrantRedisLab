@@ -16,7 +16,7 @@ DB_PARAMS='{ "name": "'"${DB_NAME}"'",
   "memory_size": '"${MEMORY_SIZE}"',
   "replication": true,
   "data_persistence": "aof",
-  "aof_policy": "appendfsync-every-sec"
+  "aof_policy": "appendfsync-every-sec",
   "sharding": true,
   "shard_key_regex": [
     {
@@ -28,8 +28,6 @@ DB_PARAMS='{ "name": "'"${DB_NAME}"'",
   ],
   "shards_count": 2
 }'
-
-echo $DB_PARAMS
 
 CURL="curl -o $0.json -s -k -u $REDIS_cluster_admin:$REDIS_cluster_password -X POST -H 'Accept: application/json' -H 'Content-Type: application/json' -d '$DB_PARAMS' https://$REDIS_cluster_fqdn:9443/v1/bdbs"
 
