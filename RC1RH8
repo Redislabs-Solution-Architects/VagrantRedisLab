@@ -8,6 +8,10 @@ redis_cluster_fqdn="rc1.example.com"
 redis_cluster_admin="redis@redis.com"
 redis_cluster_password="redis"
 
+crdb_redis_cluster_fqdn="rc2.example.com"
+crdb_redis_cluster_admin="redis@redis.com"
+crdb_redis_cluster_password="redis"
+
 # hostname prefix for your redis nodes
 hostname_prefix="rc1-rh8-node"
 # IP address prefix. If set to "192.168.69.10", nodes will be "192.168.69.101, 192.168.69.102, ..."

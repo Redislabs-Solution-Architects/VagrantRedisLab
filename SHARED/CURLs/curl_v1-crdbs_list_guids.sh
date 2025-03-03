@@ -6,4 +6,4 @@ CURL="curl -o $0.json -s -k -u $REDIS_cluster_admin:$REDIS_cluster_password -X G
 
 echo " . . Executing: $CURL"
 bash -c "$CURL"
-cat $0.json | jq
+cat $0.json | jq '.crdbs[]|{crdb_guid: .guid, name: .name}'

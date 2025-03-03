@@ -9,6 +9,9 @@ REDIS_cluster_password=$6
 REDIS_first_node_ip=$7
 REDIS_nameserver=$8
 ENV_name=$9
+CRDB_REDIS_cluster_fqdn=${10}
+CRDB_REDIS_cluster_admin=${11}
+CRDB_REDIS_cluster_password=${12}
 
 echo " . . Executing: mkdir -p ${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name"
 mkdir -p ${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name
@@ -32,7 +35,7 @@ echo " . . Creating: ${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name/${REDIS_
 cat >${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name/${REDIS_self_hostname}.sh<<EOF
 #$(date)
 echo "Executing: \$0 \$@"
-${REDIS_SHARED_mount_point}/SCRIPTS/REDIS_provision_prep.sh $REDIS_cluster_fqdn $REDIS_cluster_admin $REDIS_cluster_password $REDIS_first_node_ip $REDIS_nameserver $REDIS_SHARED_mount_point
+${REDIS_SHARED_mount_point}/SCRIPTS/REDIS_provision_prep.sh $REDIS_cluster_fqdn $REDIS_cluster_admin $REDIS_cluster_password $REDIS_first_node_ip $REDIS_nameserver $REDIS_SHARED_mount_point  $CRDB_REDIS_cluster_fqdn $CRDB_REDIS_cluster_admin $CRDB_REDIS_cluster_password
 rm -rf /root/_PROVISION
 mkdir -p /root/_PROVISION
 ln -s ${REDIS_SHARED_mount_point}/_PROVISION/$ENV_name/${REDIS_self_hostname}.sh /root/_PROVISION/${REDIS_self_hostname}.sh

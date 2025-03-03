@@ -16,7 +16,7 @@ EOF
 # Re-assign count based on the current array config.
 node_count=${#node_ips[@]}
 
-setup_redis_env_vars="$SHARED_mount_point $redis_cluster_fqdn $redis_cluster_admin $redis_cluster_password ${node_ips[0]} $nameserver $ENV_name"
+setup_redis_env_vars="$SHARED_mount_point $redis_cluster_fqdn $redis_cluster_admin $redis_cluster_password ${node_ips[0]} $nameserver $ENV_name $crdb_redis_cluster_fqdn $crdb_redis_cluster_admin $crdb_redis_cluster_password"
 
 for i in $(seq 0 $((node_count-1)) ); do
     #echo "echo Executing - : \$0" > ./RES/${ENV_name}/${node_names[i]}.${redis_cluster_fqdn}.sh
@@ -35,10 +35,10 @@ for i in $(seq 0 $((node_count-1)) ); do
 #    echo $i
 done
 vagrant_NODES+=([$((node_count+2))]="]")
-# Remove environmet folder.
-rm -rf ./RES/$ENV_name
 # Create environmet folder.
 mkdir -p ./RES/$ENV_name
+# Crleanup environmet folder.
+rm -rf ./RES/$ENV_name/*
 
 # Instantiate Vagrantfile.
 cat /dev/null > ./RES/$ENV_name/Vagrantfile
@@ -82,24 +82,24 @@ EOF
 
 cat >> ./RES/$ENV_name/redis-init.sh<<EOF
 echo "Executing \$0 \$@"
-vagrant provision --provision-with redis-provision-prep
+vagrant provision --provision-with redis-provision-prep && \\
 vagrant provision --provision-with redis-init
 EOF
 
 cat >> ./RES/$ENV_name/redis-rescratch-bins+cluster.sh<<EOF
 echo "Executing \$0 \$@"
-vagrant provision --provision-with redis-uninstall-bins
-vagrant provision --provision-with redis-provision-prep
-vagrant provision --provision-with redis-install-bins
-vagrant provision --provision-with redis-create-cluster 
+vagrant provision --provision-with redis-uninstall-bins && \\
+vagrant provision --provision-with redis-provision-prep && \\
+vagrant provision --provision-with redis-install-bins && \\
+vagrant provision --provision-with redis-create-cluster
 EOF
 
 cat >> ./RES/$ENV_name/redis-install-bins+cluster.sh<<EOF
 echo "Executing \$0 \$@"
-vagrant provision --provision-with redis-provision-prep
-vagrant provision --provision-with redis-init
-vagrant provision --provision-with redis-install-bins
-vagrant provision --provision-with redis-create-cluster 
+vagrant provision --provision-with redis-provision-prep && \\
+vagrant provision --provision-with redis-init && \\
+vagrant provision --provision-with redis-install-bins && \\
+vagrant provision --provision-with redis-create-cluster
 EOF
 
 cat >> ./RES/$ENV_name/redis-uninstall.sh<<EOF
