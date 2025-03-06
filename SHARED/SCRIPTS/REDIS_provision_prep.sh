@@ -1,6 +1,6 @@
 echo "Executing: $0 $@"
 REDIS_subnet=$(echo $4 | sed 's/\([0-9]\+\.[0-9]\+\.[0-9]\+\)\.[0-9]\+/\1/')
-echo " . . Creating /root/redis-env-vars.sh"
+echo " . . Creating: /root/redis-env-vars.sh"
 cat >/root/redis-env-vars.sh <<EOF
 export REDIS_cluster_fqdn=$1
 export REDIS_cluster_admin=$2

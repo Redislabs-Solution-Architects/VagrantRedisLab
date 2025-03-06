@@ -16,7 +16,7 @@ worker_node_count=${12}
 echo " . . Executing: mkdir -p ${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name"
 mkdir -p ${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name
 
-echo " . . Creating ${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name/INIT_host.sh"
+echo " . . Creating: ${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name/INIT_host.sh"
 echo "cd \$(dirname \$0)&&./\$(hostname -s).sh" > ${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name/INIT_host.sh
 
 cat >${VAGRANT_SHARED_mount_point}/_PROVISION/$ENV_name/DOitALL.sh<<EOF

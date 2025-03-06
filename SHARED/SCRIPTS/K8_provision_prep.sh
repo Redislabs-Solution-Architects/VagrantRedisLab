@@ -1,6 +1,6 @@
 echo "Executing: $0 $@"
 K8_subnet=$(echo $1|sed 's/\([0-9]\+\.[0-9]\+\.[0-9]\+\)\.[0-9]\+/\1/')
-echo " . . Creating /root/k8-env-vars.sh"
+echo " . . Creating: /root/k8-env-vars.sh"
 cat >/root/k8-env-vars.sh<<EOF
 export K8_first_node_ip=$1
 export K8_subnet=$K8_subnet
