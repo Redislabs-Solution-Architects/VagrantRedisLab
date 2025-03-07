@@ -47,3 +47,36 @@ until [ "$msg" == "completed" ]; do
     msg=$(cat $0-action.json | jq -r '.status')
     sleep 1
 done
+
+
+exit 0
+
+
+{
+    "name": "mydb01",
+    "memory_size": 100000000,
+    "replication": true,
+    "eviction_policy": "volatile-lru",
+    "sharding": false,
+    "type": "redis",
+    "oss_cluster": false,
+    "proxy_policy": "single",
+    "shards_placement": "dense",
+    "port": 12100,
+    "uid": 10,
+    "authentication_redis_pass": "Zxas12Qw",
+    "module_list": [
+        {
+            "module_args": "PARTITIONS AUTO",
+            "module_name": "search",
+            "semantic_version": "2.0.8"
+        },
+        {
+            "module_args": "",
+            "module_name": "ReJSON",
+            "semantic_version": "1.0.7"
+        }
+    ]
+}
+curl -X POST -H ‘Content-type: application/json’ -u igor.borsutsky@redislabs.com:Password 
+-d ‘{ “name”: “mydb01", “memory_size”: 100000000, “replication”: true, “eviction_policy”: “volatile-lru”, “sharding”: false, “type”: “redis”, “oss_cluster”: false, “proxy_policy”: “single”, “shards_placement”: “dense”, “port”: 12100, “uid”: 10, “authentication_redis_pass”: “Zxas12Qw”, “module_list”: [{“module_args”: “PARTITIONS AUTO”,“module_name”: “search”, “semantic_version”: “2.0.8”},{“module_args”: “”, “module_name”: “ReJSON”, “semantic_version”: “1.0.7”}]}’ -k https://c101.igorbo.cs.redislabs.com:9443/v1/bdbs
