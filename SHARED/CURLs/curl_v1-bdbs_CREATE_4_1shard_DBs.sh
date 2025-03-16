@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source /root/redis-env-vars.sh
+test "$redis_env_vars" = '' && echo "Sourcing default /root/redis-env-vars.sh" || echo "Sourcing configured: $redis_env_vars"
+test "$redis_env_vars" = '' && source /root/redis-env-vars.sh || source $redis_env_vars
 
 for i in 1 2 3 4; do
   DB_NAME="Test$i"

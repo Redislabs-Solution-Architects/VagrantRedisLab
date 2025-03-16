@@ -1,14 +1,19 @@
-source /root/redis-env-vars.sh
+#!/bin/bash
 
-for db in $(rladmin status databases | grep ^db | awk '{print $1}' | awk -F ':' '{print $2}'); do
-    echo " . . DB id: $db---------------------------------------------------"
+test "$redis_env_vars" = '' && echo "Sourcing default /root/redis-env-vars.sh" || echo "Sourcing configured: $redis_env_vars"
+test "$redis_env_vars" = '' && source /root/redis-env-vars.sh || source $redis_env_vars
+
+for db in $(curl -s -k -u $REDIS_cluster_admin:$REDIS_cluster_password -X GET -H 'Accept: application/json' https://$REDIS_cluster_fqdn:9443/v1/bdbs | jq '.[] | .uid'); do
+    echo " > > > DB id: $db. General availability."
+    echo
     echo "For GA DB availability (at least one endpoint is available). 200 = available/500 = not available"
     CURL="curl -w '%{http_code}' -k -u $REDIS_cluster_admin:$REDIS_cluster_password -X GET -H 'Accept: application/json' https://$REDIS_cluster_fqdn:9443/v1/bdbs/$db/availability"
     echo " . . Executing: $CURL"
     echo
     bash -c "$CURL"
-    echo
-    for node in $(rladmin status nodes | grep node | awk '{print $3}'); do
+    echo; echo
+    echo " > > > > DB id: $db. Per node availability (for LB, all_nodes/all_master_nodes)."
+    for node in $(curl -s -k -u $REDIS_cluster_admin:$REDIS_cluster_password -X GET -H 'Accept: application/json' https://$REDIS_cluster_fqdn:9443/v1/nodes | jq '.[] | .addr'); do
         echo
         echo " . . . Each node tested if endpoint is available. 200 = available/500 = not available"
         echo " . . . . NODE IP: $node"
@@ -18,6 +23,5 @@ for db in $(rladmin status databases | grep ^db | awk '{print $1}' | awk -F ':' 
         bash -c "$CURL"
         echo
     done # node loop
-    echo
     echo "----------------------------------------------------------------"
 done # db loop
