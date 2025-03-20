@@ -10,6 +10,7 @@ kind: "RedisEnterpriseCluster"
 metadata:
   name: $1-rec
 spec:
+  username: redis@redis.com
   nodes: 3
   redisEnterpriseNodeResources:
     limits:
@@ -188,6 +189,11 @@ EOF
 echo " [+] Running: kubectl apply -f ./$2/$1-ingress_$1-enterprise-database.yaml" && \
 kubectl apply -f ./$2/$1-ingress_$1-enterprise-database.yaml
 sleep 5
+
+echo " [+] Saving credentials into ./$2/$1-credentials.txt."
+cat /dev/null > ./$2/$1-credentials.txt
+echo $(kubectl get secret $1-rec -o jsonpath='{.data.username}' | base64 --decode) >> ./$2/$1-credentials.txt
+echo $(kubectl get secret $1-rec -o jsonpath='{.data.password}' | base64 --decode) >> ./$2/$1-credentials.txt
 
 # Ingress to /etc/hosts. Lazy to figure out the JSON path, so... :)
 while [ "$(kubectl get ingress -n $1 -o json|grep ip|awk '{print $2}'|sed 's/\"//g'|tail -1)" == "" ]; do echo " [+] Waiting for ingress IP assigned...";sleep 5; kubectl get ingress -n $1; done
