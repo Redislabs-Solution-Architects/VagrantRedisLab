@@ -3,7 +3,7 @@
 echo "Existing databases:"
 ./curl_v1-bdbs_list_uids.sh
 
-read -p "Enter UID to delete BDB (Ctrl+c to exit): " MOD_UID
+read -p "Enter UID to dump config for BDB (Ctrl+c to exit): " MOD_UID
 
 echo "Getting config dump for DB $MOD_UID..."
 ./curl_v1-bdbs_ID.sh $MOD_UID

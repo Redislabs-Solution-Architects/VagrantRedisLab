@@ -1,0 +1,1 @@
+export redis_env_vars=$(pwd)/redis-CURL-vars.sh

@@ -1,0 +1,20 @@
+
+Replicate keys from opensource with added prefix:
+
+[root@rc1-rh8-node1 RIOT]# redis-cli -n 4
+127.0.0.1:6379[4]> keys *
+1) "key4"
+127.0.0.1:6379[4]>
+[root@rc1-rh8-node1 RIOT]# redis-cli -h redis-10001.rc1.example.com -p 10001
+redis-10001.rc1.example.com:10001> keys *
+(empty array)
+redis-10001.rc1.example.com:10001>
+[root@rc1-rh8-node1 RIOT]# ./riot-standalone-4.3.0-linux-x86_64/bin/riot replicate redis://localhost:6379/4 redis://redis-10001.rc1.example.com:10001 --key-proc "4:#{key}"
+Scanning 100% [====================================================================================================] 1/1 (0:00:00 / 0:00:00) ?/s
+Comparing 100% [===============================================================================================] 1/1 (0:00:00 / 0:00:00) ?/sOK 1
+[root@rc1-rh8-node1 RIOT]#
+[root@rc1-rh8-node1 RIOT]# redis-cli -h redis-10001.rc1.example.com -p 10001
+redis-10001.rc1.example.com:10001> keys *
+1) "4:key4"
+redis-10001.rc1.example.com:10001>
+[root@rc1-rh8-node1 RIOT]#

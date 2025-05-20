@@ -4,6 +4,7 @@ test "$redis_env_vars" = '' && echo "Sourcing default /root/redis-env-vars.sh" |
 test "$redis_env_vars" = '' && source /root/redis-env-vars.sh || source $redis_env_vars
 
 echo " ! ! ! WARNING ! ! ! This script will apply curl_v1-bdbs-actions-optimize_shards_placement-*.json files. Press any key to continue."
+# Read a single character from user input without echoing it back
 read -s -n 1
 
 # For all DBs

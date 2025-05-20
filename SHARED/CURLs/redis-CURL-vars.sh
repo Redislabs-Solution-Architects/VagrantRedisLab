@@ -1,11 +1,9 @@
-export REDIS_cluster_fqdn=rc1.example.com
-export REDIS_cluster_admin=redis@redis.com
-export REDIS_cluster_password=redis
-export REDIS_first_node_ip=192.168.69.101
-export REDIS_subnet=192.168.69
-export REDIS_self_IP=192.168.69.101 
-export REDIS_nameserver=192.168.69.2
-export REDIS_SHARED_mount_point=/root/SHARED
-export CRDB_REDIS_cluster_fqdn=rc2.example.com
-export CRDB_REDIS_cluster_admin=redis@redis.com
-export CRDB_REDIS_cluster_password=redis
+# Redis cluster variables
+export REDIS_cluster_fqdn="rc1.example.com"  # FQDN of Redis cluster server
+export REDIS_cluster_admin="redis@redis.com"  # Admin username for Redis cluster
+export REDIS_cluster_password="redis"  # Password for Redis cluster
+
+# CRDB Redis cluster variables (pier to the above)
+export CRDB_REDIS_cluster_fqdn="rc2.example.com"  # FQDN of CRDB Redis cluster server
+export CRDB_REDIS_cluster_admin="redis@redis.com"  # Admin username for CRDB Redis cluster
+export CRDB_REDIS_cluster_password="redis"  # Password for CRDB Redis cluster

@@ -1,0 +1,2 @@
+Docker-based: docker ps --filter label!=io.kubernetes.pod.namespace
+CRI-O based: crictl ps -a --no-trunc
